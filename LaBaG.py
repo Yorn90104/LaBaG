@@ -7,10 +7,12 @@ p2 = 'x'
 p3 = 'x'
 score = 0
 add = 0
+times = 30
+ed = 0
 
-print("共 30 次")
+print("共 {} 次".format(times))
 
-for fqc in range(1,31) :
+while ed < times :
     add = 0
     #暫時代替按鈕
     button=input("按下 ENTER 開始")
@@ -214,10 +216,13 @@ for fqc in range(1,31) :
             add = round( add / 3 )
 
         score = score + add
+        ed = ed + 1
 
-        print("第{}次".format(fqc))
+        print("第{}次".format(ed))
         print("+" ,add)
         print("目前分數：",score)
+    else:
+        print("請勿做多餘的動作")
 
 print("END")
 print("最終分數為：",score)
