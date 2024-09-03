@@ -1,18 +1,20 @@
-import random
+#region 定義區
+from random import randint
 
 ram1 = 0
 ram2 = 0
 ram3 = 0
+
 p1 = 'x'
 p2 = 'x'
 p3 = 'x'
+
 score = 0
 add = 0
 times = 30
 ed = 0
 
-def change(x,y) :
-
+def change(x,y) :#(歸屬,隨機數)
       if y <= 36 :
             x = 'a'
       elif 36 < y <= 60 :
@@ -27,7 +29,7 @@ def change(x,y) :
             x = 'f'
       return x
 
-def only(x,y) :
+def only(x,y) :#(歸屬,3不同單一增加分)
       if x == 'a':
             y = y + 100
       elif x == 'b' :
@@ -42,17 +44,20 @@ def only(x,y) :
             y = y + 10000
       return y
 
+#region 執行區
 print("共 {} 次".format(times))
-
+print("按下 ENTER 開始")
 while ed < times :
     add = 0
+    
     #暫時代替按鈕
-    button=input("按下 ENTER 開始")
-    if button == "" :
+    press=input()
+
+    if press == "" :
         #隨機數
-        ram1 = random.randint(1,100)
-        ram2 = random.randint(1,100)
-        ram3 = random.randint(1,100)
+        ram1 = randint(1,100)
+        ram2 = randint(1,100)
+        ram3 = randint(1,100)
 
         #1
         p1 = change(p1,ram1)
@@ -64,7 +69,7 @@ while ed < times :
         p3 = change(p3,ram3)
 
 
-        print(p1,' ',p2,' ',p3)
+        print(' | ',p1,' | ',p2,' | ',p3,' | ')
 
         #增加分數
         #3個相同
@@ -83,7 +88,7 @@ while ed < times :
                 add = add + 20000
 
         #2個相同=(2個相同的+1個不同的)/1.3
-        #1 & 2
+        # 1 & 2
         elif p1 == p2 :
             #2個同
             if p2 == 'a':
@@ -113,7 +118,7 @@ while ed < times :
                 add = add + 2500
             add = round( add / 1.3 )
 
-        #2 & 3
+        # 2 & 3
         elif p2 == p3 :
             #2個同
             if p2 == 'a':
@@ -143,7 +148,7 @@ while ed < times :
                 add = add + 2500
             add = round( add / 1.3 )
 
-        #1 & 3
+        # 1 & 3
         elif p1 == p3 :
             #2個同
             if p3 == 'a':
@@ -195,5 +200,6 @@ while ed < times :
     else:
         print("請勿做多餘的動作")
 
+#region 結尾
 print("END")
 print("最終分數為：",score)
