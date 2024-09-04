@@ -5,44 +5,47 @@ ram1 = 0
 ram2 = 0
 ram3 = 0
 
-p1 = 'x'
-p2 = 'x'
-p3 = 'x'
+p1 = ''
+p2 = ''
+p3 = ''
 
 score = 0
 add = 0
 times = 30
 ed = 0
 
-def change(x,y) :#(歸屬,隨機數)
+def change(x,y) :
+      '(歸屬,隨機數)'
       if y <= 36 :
-            x = 'a'
+            x = 'A'
       elif 36 < y <= 60 :
-            x = 'b'
+            x = 'B'
       elif 60 < y <= 77 :
-            x = 'c'
+            x = 'C'
       elif 77 < y <= 89 :
-            x = 'd'
+            x = 'D'
       elif 89 < y <= 97 :
-            x = 'e'
+            x = 'E'
       else :
-            x = 'f'
+            x = 'F'
       return x
 
-def only(x,y) :#(歸屬,3不同單一增加分)
-      if x == 'a':
+def only(x,y) :
+      '歸屬,增加分'
+      if x == 'A':
             y = y + 100
-      elif x == 'b' :
+      elif x == 'B' :
             y = y + 170
-      elif x == 'c' :
+      elif x == 'C' :
             y = y + 780
-      elif x == 'd' :
+      elif x == 'D' :
             y = y + 870
-      elif x == 'e' :
+      elif x == 'E' :
             y = y + 5000
-      elif x == 'f' :
+      elif x == 'F' :
             y = y + 10000
       return y
+#endregion
 
 #region 執行區
 print("共 {} 次".format(times))
@@ -52,7 +55,7 @@ while ed < times :
     
     #暫時代替按鈕
     press=input()
-
+    
     if press == "" :
         #隨機數
         ram1 = randint(1,100)
@@ -74,107 +77,107 @@ while ed < times :
         #增加分數
         #3個相同
         if p1 == p2 == p3 :
-            if p1 == 'a':
+            if p1 == 'A':
                 add = add + 200
-            elif p1 == 'b' :
+            elif p1 == 'B' :
                 add = add + 600
-            elif p1 == 'c' :
+            elif p1 == 'C' :
                 add = add + 1600
-            elif p1 == 'd' :
+            elif p1 == 'D' :
                 add = add + 1800
-            elif p1 == 'e' :
+            elif p1 == 'E' :
                 add = add + 10000
-            elif p1 == 'f' :
+            elif p1 == 'F' :
                 add = add + 20000
 
         #2個相同=(2個相同的+1個不同的)/1.3
         # 1 & 2
         elif p1 == p2 :
             #2個同
-            if p2 == 'a':
+            if p2 == 'A':
                 add = add + 100
-            elif p2 == 'b' :
+            elif p2 == 'B' :
                 add = add + 170
-            elif p2 == 'c' :
+            elif p2 == 'C' :
                 add = add + 780
-            elif p2 == 'd' :
+            elif p2 == 'D' :
                 add = add + 870
-            elif p2 == 'e' :
+            elif p2 == 'E' :
                 add = add + 5000
-            elif p2 == 'f' :
+            elif p2 == 'F' :
                 add = add + 10000
             #不同的
-            if p3 == 'a':
+            if p3 == 'A':
                 add = add + 30
-            elif p3 == 'b' :
+            elif p3 == 'B' :
                 add = add + 50
-            elif p3 == 'c' :
+            elif p3 == 'C' :
                 add = add + 250
-            elif p3 == 'd' :
+            elif p3 == 'D' :
                 add = add + 290
-            elif p3 == 'e' :
+            elif p3 == 'E' :
                 add = add + 1200
-            elif p3 == 'f' :
+            elif p3 == 'F' :
                 add = add + 2500
             add = round( add / 1.3 )
 
         # 2 & 3
         elif p2 == p3 :
             #2個同
-            if p2 == 'a':
+            if p2 == 'A':
                 add = add + 100
-            elif p2 == 'b' :
+            elif p2 == 'B' :
                 add = add + 170
-            elif p2 == 'c' :
+            elif p2 == 'C' :
                 add = add + 780
-            elif p2 == 'd' :
+            elif p2 == 'D' :
                 add = add + 870
-            elif p2 == 'e' :
+            elif p2 == 'E' :
                 add = add + 5000
-            elif p2 == 'f' :
+            elif p2 == 'F' :
                 add = add + 10000
             #不同的
-            if p1 == 'a':
+            if p1 == 'A':
                 add = add + 30
-            elif p1 == 'b' :
+            elif p1 == 'B' :
                 add = add + 50
-            elif p1 == 'c' :
+            elif p1 == 'C' :
                 add = add + 250
-            elif p1 == 'd' :
+            elif p1 == 'D' :
                 add = add + 290
-            elif p1 == 'e' :
+            elif p1 == 'E' :
                 add = add + 1200
-            elif p1 == 'f' :
+            elif p1 == 'F' :
                 add = add + 2500
             add = round( add / 1.3 )
 
         # 1 & 3
         elif p1 == p3 :
             #2個同
-            if p3 == 'a':
+            if p3 == 'A':
                 add = add + 100
-            elif p3 == 'b' :
+            elif p3 == 'B' :
                 add = add + 170
-            elif p3 == 'c' :
+            elif p3 == 'C' :
                 add = add + 780
-            elif p3 == 'd' :
+            elif p3 == 'D' :
                 add = add + 870
-            elif p3 == 'e' :
+            elif p3 == 'E' :
                 add = add + 5000
-            elif p3 == 'f' :
+            elif p3 == 'F' :
                 add = add + 10000
             #不同的
-            if p2 == 'a':
+            if p2 == 'A':
                 add = add + 30
-            elif p2 == 'b' :
+            elif p2 == 'B' :
                 add = add + 50
-            elif p2 == 'c' :
+            elif p2 == 'C' :
                 add = add + 250
-            elif p2 == 'd' :
+            elif p2 == 'D' :
                 add = add + 290
-            elif p2 == 'e' :
+            elif p2 == 'E' :
                 add = add + 1200
-            elif p2 == 'f' :
+            elif p2 == 'F' :
                 add = add + 2500
             add = round( add / 1.3 )
 
@@ -194,12 +197,14 @@ while ed < times :
         score = score + add
         ed = ed + 1
 
-        print("第{}次".format(ed))
+        print(f"第{ed}次")
         print("+" ,add)
         print("目前分數：",score)
     else:
         print("請勿做多餘的動作")
+#endregion
 
 #region 結尾
 print("END")
 print("最終分數為：",score)
+#endregion
