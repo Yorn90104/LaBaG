@@ -31,7 +31,7 @@ def change(x,y) :
       return x
 
 def only(x,y) :
-      '歸屬,增加分'
+      '(歸屬,增加分)'
       if x == 'A':
             y = y + 100
       elif x == 'B' :
@@ -45,6 +45,14 @@ def only(x,y) :
       elif x == 'F' :
             y = y + 10000
       return y
+
+def result(s , a , e) :
+    "(總分,增加分,已遊玩次數)"
+    s = s + a
+    print(f"第{e}次")
+    print("+" ,a)
+    print("目前分數：",s)
+
 #endregion
 
 #region 執行區
@@ -62,17 +70,13 @@ while ed < times :
         ram2 = randint(1,100)
         ram3 = randint(1,100)
 
-        #1
+        #歸屬
         p1 = change(p1,ram1)
-
-        #2
         p2 = change(p2,ram2)
-
-        #3
         p3 = change(p3,ram3)
 
 
-        print(' | ',p1,' | ',p2,' | ',p3,' | ')
+        print(' | ', p1 ,' | ', p2 ,' | ', p3 ,' | ')
 
         #增加分數
         #3個相同
@@ -194,12 +198,11 @@ while ed < times :
            
             add = round( add / 3 )
 
-        score = score + add
-        ed = ed + 1
+        
+        ed += 1
 
-        print(f"第{ed}次")
-        print("+" ,add)
-        print("目前分數：",score)
+        result(score , add , ed)
+        
     else:
         print("請勿做多餘的動作")
 #endregion
