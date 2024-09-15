@@ -15,6 +15,8 @@ def IMAGE(file , w , h) :
     return pc
 
 def resize_BG(event) :
+    global canvas
+
     #獲取當前長寬
     New_width = event.width
     New_height = event.height
@@ -110,72 +112,71 @@ def Begin() :
 
       print(u"按鈕被點擊了！")
       
-      if ed >= times :
-            #判斷結束
-            print(U"遊戲已結束")
-            print(u"最終分數為：",score)
-            return
-
-      #未結束
-      #隨機數
-      ram1 = randint(1,100)
-      ram2 = randint(1,100)
-      ram3 = randint(1,100)
-
-      #歸屬
-      p1 = change(p1,ram1)
-      p2 = change(p2,ram2)
-      p3 = change(p3,ram3)
-
-
-      print(f' | {p1} | {p2} | {p3} |')
-
-      #增加分數
-      #3個相同
-      if p1 == p2 == p3 :
-            add = ADD(p1 , add , same3)
-
-      #2個相同=(2個相同的+1個不同的)/1.3
-      # 1 & 2
-      elif p1 == p2 :
-            add = ADD(p1 , add , same2)
-            #不同的
-            add = ADD(p3 , add , same1)
-
-            add = round( add / 1.3 )
-
-      # 2 & 3
-      elif p2 == p3 :
-            #2個同
-            add = ADD(p2 , add , same2)
-            #不同的
-            add = ADD(p1 , add , same1)
-
-            add = round( add / 1.3 )
-
-      # 1 & 3
-      elif p1 == p3 :
-            #2個同
-            add = ADD(p3 , add , same2)
-            #不同的
-            add = ADD(p2 , add , same1)
-
-            add = round( add / 1.3 )
-
-      #3個都不同 加總/3
-      elif p1 != p2 != p3 :
-            #1
-            add = ADD(p1 , add , same1)
-            
-            #2
-            add = ADD(p2 , add , same1)
-            
-            #3
-            add = ADD(p3 , add , same1)
+      if ed < times :
       
-            add = round( add / 3 )
+            #隨機數
+            ram1 , ram2 , ram3 = randint(1,100) , randint(1,100) , randint(1,100)
 
-      result()
+            #歸屬
+            p1 = change(p1,ram1)
+            p2 = change(p2,ram2)
+            p3 = change(p3,ram3)
+
+
+            print(f' | {p1} | {p2} | {p3} |')
+
+            #增加分數
+            #3個相同
+            if p1 == p2 == p3 :
+                  add = ADD(p1 , add , same3)
+
+            #2個相同=(2個相同的+1個不同的)/1.3
+            # 1 & 2
+            elif p1 == p2 :
+                  add = ADD(p1 , add , same2)
+                  #不同的
+                  add = ADD(p3 , add , same1)
+
+                  add = round( add / 1.3 )
+
+            # 2 & 3
+            elif p2 == p3 :
+                  #2個同
+                  add = ADD(p2 , add , same2)
+                  #不同的
+                  add = ADD(p1 , add , same1)
+
+                  add = round( add / 1.3 )
+
+            # 1 & 3
+            elif p1 == p3 :
+                  #2個同
+                  add = ADD(p3 , add , same2)
+                  #不同的
+                  add = ADD(p2 , add , same1)
+
+                  add = round( add / 1.3 )
+
+            #3個都不同 加總/3
+            elif p1 != p2 != p3 :
+                  #1
+                  add = ADD(p1 , add , same1)
+                  
+                  #2
+                  add = ADD(p2 , add , same1)
+                  
+                  #3
+                  add = ADD(p3 , add , same1)
+            
+                  add = round( add / 3 )
+
+            result()
+
+            if ed >= times :
+                  #判斷結束
+                  print(U"遊戲已結束")
+                  print(u"最終分數為：",score)
+                  return
                   
 #endregion
 
