@@ -14,40 +14,18 @@ def IMAGE(file , w , h) :
     pc = ImageTk.PhotoImage(pc)
     return pc
 
-def resize_BG(event) :
-    global canvas
-
-    #獲取當前長寬
-    New_width = event.width
-    New_height = event.height
-
-    #調整大小&更新圖片
-    New_BG = IMAGE(r'.\Asset\BG.png' , New_width , New_height)
-    canvas.delete("bg") #刪除標記為"bg"的圖片
-    canvas.create_image(0, 0, image=New_BG, anchor="nw", tags="bg") #新圖片
-
-    #保存圖像引用 防止被回收(New_BG為非全域變數)
-    canvas.image = New_BG
-    
-    # 更新 Canvas 的大小以匹配新的視窗大小
-    canvas.config(width=New_width, height=New_height)
-
-    canvas.coords(button_Begin, New_width // 2, New_height // 2)
-
 win = tk.Tk() #建立視窗
 win.title("啦八機") #視窗標題
 win.iconbitmap(r'.\Asset\Superhhh.ico') #視窗小圖
-win.geometry("640x360") #視窗長寬
+win.geometry("360x640") #視窗長寬
+win.resizable(False, False) # 禁用水平和垂直方向的調整
 
-BG = IMAGE(r'.\Asset\BG.png' , 640 , 360)
+BG = IMAGE(r'.\Asset\BG.png' , 360 , 640)
 
 # 创建 Canvas & 设置背景图片
 canvas = tk.Canvas(win, width=640, height=360)
 canvas.pack(fill="both", expand=True) #在視窗中水平和垂直方向上擴展，以填充其父容器的空間
-canvas.create_image(0, 0, image=BG, anchor="nw" , tags = "bg") #初次加載圖片 & "nw" = north west & 標記圖片為"bg"
-
-#綁定視窗大小變化事件
-win.bind('<Configure>', resize_BG)
+canvas.create_image(0, 0, image=BG, anchor="nw" ) #加載背景圖片 & "nw" = north west 
 
 #endregion
 
@@ -99,10 +77,11 @@ def ADD(x,y,lst) :
       return y
 
 def result() :
-    global score , add , ed
+    global score , add , ed , p1 , p2 , p3
     ed += 1
     score += add
     print(f"第{ed}次")
+    print(f' | {p1} | {p2} | {p3} |')
     print(f"+{add}")
     print(f"目前分數：{score}")
     add = 0
@@ -121,9 +100,6 @@ def Begin() :
             p1 = change(p1,ram1)
             p2 = change(p2,ram2)
             p3 = change(p3,ram3)
-
-
-            print(f' | {p1} | {p2} | {p3} |')
 
             #增加分數
             #3個相同
@@ -182,8 +158,8 @@ def Begin() :
 
 print(u"共 {} 次".format(times))
 
-start = tk.Button(win, text="開始", command=Begin)
-button_Begin = canvas.create_window(320, 180, window=start)#將按鈕放置Canva上 320 180 為居中初始位置
+start = tk.Button(win , text = "開始" , command=Begin)
+button_Begin = canvas.create_window(180 , 320 , window = start) #將按鈕放置Canva上 320 180 為居中初始位置
 
 win.mainloop() #視窗常駐
 
