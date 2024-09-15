@@ -1,9 +1,11 @@
-#region 定義區
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 import tkinter as tk
 from PIL import Image , ImageTk
 from random import randint #隨機數字
 
-
+#region 視窗區
 def IMAGE(file , w , h) :
     "處理成TK可識別的圖"
     "(路徑,長,寬)"
@@ -12,7 +14,7 @@ def IMAGE(file , w , h) :
     pc = ImageTk.PhotoImage(pc)
     return pc
 
-def resize_BG(event):
+def resize_BG(event) :
     #獲取當前長寬
     New_width = event.width
     New_height = event.height
@@ -24,6 +26,11 @@ def resize_BG(event):
 
     #保存圖像引用 防止被回收(New_BG為非全域變數)
     canvas.image = New_BG
+    
+    # 更新 Canvas 的大小以匹配新的視窗大小
+    canvas.config(width=New_width, height=New_height)
+
+    canvas.coords(button_Begin, New_width // 2, New_height // 2)
 
 win = tk.Tk() #建立視窗
 win.title("啦八機") #視窗標題
@@ -40,15 +47,12 @@ canvas.create_image(0, 0, image=BG, anchor="nw" , tags = "bg") #初次加載圖�
 #綁定視窗大小變化事件
 win.bind('<Configure>', resize_BG)
 
-win.mainloop() #視窗常駐
+#endregion
 
-ram1 = 0
-ram2 = 0
-ram3 = 0
+#region 定義區
+ram1 , ram2 , ram3 = 0 , 0 , 0
 
-p1 = ''
-p2 = ''
-p3 = ''
+p1 , p2 , p3 = '' , '' , ''
 
 score = 0
 add = 0
@@ -56,9 +60,9 @@ times = 30
 ed = 0
 
 #分數清單
-same3 = [20000 , 10000 , 1800 , 1600 , 600 , 200]
-same2 = [10000 ,5000 , 870 , 780 , 170 , 100]
-same1 = [2500 , 1200 , 290 , 250 , 50 , 30]
+same3 = [200 , 600 , 1600 , 1800 , 10000 , 20000]
+same2 = [100 , 170 , 780 , 870 , 5000 , 10000]
+same1 = [30 , 50 , 250 , 290 , 1200 , 2500]
 
 def change(x,y) :
       '(歸屬,隨機數)'
@@ -92,54 +96,56 @@ def ADD(x,y,lst) :
             y = y + lst[5]
       return y
 
-def result(s , a , e) :
-    "(總分,增加分,已遊玩次數)"
-    s = s + a
-    print(f"第{e}次")
-    print("+" ,a)
-    print("目前分數：",s)
-
-#endregion
-
-#region 執行區
-print("共 {} 次".format(times))
-print("按下 ENTER 開始")
-while ed < times :
+def result() :
+    global score , add , ed
+    ed += 1
+    score += add
+    print(f"第{ed}次")
+    print(f"+{add}")
+    print(f"目前分數：{score}")
     add = 0
-    
-    #暫時代替按鈕
-    press=input()
-    
-    if press == "" :
-        #隨機數
-        ram1 = randint(1,100)
-        ram2 = randint(1,100)
-        ram3 = randint(1,100)
 
-        #歸屬
-        p1 = change(p1,ram1)
-        p2 = change(p2,ram2)
-        p3 = change(p3,ram3)
+def Begin() :
+      global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed
+
+      print(u"按鈕被點擊了！")
+      
+      if ed >= times :
+            #判斷結束
+            print(U"遊戲已結束")
+            print(u"最終分數為：",score)
+            return
+
+      #未結束
+      #隨機數
+      ram1 = randint(1,100)
+      ram2 = randint(1,100)
+      ram3 = randint(1,100)
+
+      #歸屬
+      p1 = change(p1,ram1)
+      p2 = change(p2,ram2)
+      p3 = change(p3,ram3)
 
 
-        print(' | ', p1 ,' | ', p2 ,' | ', p3 ,' | ')
+      print(f' | {p1} | {p2} | {p3} |')
 
-        #增加分數
-        #3個相同
-        if p1 == p2 == p3 :
+      #增加分數
+      #3個相同
+      if p1 == p2 == p3 :
             add = ADD(p1 , add , same3)
 
-        #2個相同=(2個相同的+1個不同的)/1.3
-        # 1 & 2
-        elif p1 == p2 :
+      #2個相同=(2個相同的+1個不同的)/1.3
+      # 1 & 2
+      elif p1 == p2 :
             add = ADD(p1 , add , same2)
             #不同的
             add = ADD(p3 , add , same1)
 
             add = round( add / 1.3 )
 
-        # 2 & 3
-        elif p2 == p3 :
+      # 2 & 3
+      elif p2 == p3 :
             #2個同
             add = ADD(p2 , add , same2)
             #不同的
@@ -147,8 +153,8 @@ while ed < times :
 
             add = round( add / 1.3 )
 
-        # 1 & 3
-        elif p1 == p3 :
+      # 1 & 3
+      elif p1 == p3 :
             #2個同
             add = ADD(p3 , add , same2)
             #不同的
@@ -156,8 +162,8 @@ while ed < times :
 
             add = round( add / 1.3 )
 
-        #3個都不同 加總/3
-        elif p1 != p2 != p3 :
+      #3個都不同 加總/3
+      elif p1 != p2 != p3 :
             #1
             add = ADD(p1 , add , same1)
             
@@ -166,19 +172,17 @@ while ed < times :
             
             #3
             add = ADD(p3 , add , same1)
-           
+      
             add = round( add / 3 )
 
-        
-        ed += 1
-
-        result(score , add , ed)
-        
-    else:
-        print("請勿做多餘的動作")
+      result()
+                  
 #endregion
 
-#region 結尾
-print("END")
-print("最終分數為：",score)
-#endregion
+print(u"共 {} 次".format(times))
+
+start = tk.Button(win, text="開始", command=Begin)
+button_Begin = canvas.create_window(320, 180, window=start)#將按鈕放置Canva上 320 180 為居中初始位置
+
+win.mainloop() #視窗常駐
+
