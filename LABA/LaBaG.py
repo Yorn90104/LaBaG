@@ -14,18 +14,38 @@ def IMAGE(file , w , h) :
     pc = ImageTk.PhotoImage(pc)
     return pc
 
+def CanvaPIC(pc , x , y) :
+      '(照片 , 水平座標 , 垂直座標)'
+      '加載新的圖片並放在畫布上'
+      canvas.create_image( x , y , image = pc , anchor = "nw")
+
 win = tk.Tk() #建立視窗
 win.title("啦八機") #視窗標題
-win.iconbitmap(r'.\Asset\Superhhh.ico') #視窗小圖
-win.geometry("360x640") #視窗長寬
+win.iconbitmap('.\\Asset\\Superhhh.ico') #視窗小圖
+win.geometry("450x800") #視窗長寬
 win.resizable(False, False) # 禁用水平和垂直方向的調整
 
-BG = IMAGE(r'.\Asset\BG.png' , 360 , 640)
+#圖片
+BG = IMAGE('.\\Asset\\BG.png' , 450 , 800)
+
+QST = IMAGE('.\\Asset\\QST.jpg' , 150 , 200) #?
+Gss = IMAGE('.\\Asset\\Gss.jpg' , 150 , 200) #A
+Hhh = IMAGE('.\\Asset\\Hhh.jpg' , 150 , 200) #B
+Hentai = IMAGE('.\\Asset\\Hentai.jpg' , 150 , 200) #C
+Handsun = IMAGE('.\\Asset\\Handsun.jpg' , 150 , 200) #D
+Kachu = IMAGE('.\\Asset\\Kachu.jpg' , 150 , 200) #E
+Rrr = IMAGE('.\\Asset\\RRR.jpg' , 150 , 200) #F
+
+BeginPIC = IMAGE('.\\Asset\\Start.jpg' , 150 , 50)
 
 # 创建 Canvas & 设置背景图片
-canvas = tk.Canvas(win, width=640, height=360)
-canvas.pack(fill="both", expand=True) #在視窗中水平和垂直方向上擴展，以填充其父容器的空間
-canvas.create_image(0, 0, image=BG, anchor="nw" ) #加載背景圖片 & "nw" = north west 
+canvas = tk.Canvas(win, width = 450, height = 800)
+canvas.pack(fill="both", expand = True) #在視窗中水平和垂直方向上擴展，以填充其父容器的空間
+canvas.create_image(0, 0, image = BG, anchor = "nw" ) #加載背景圖片 & "nw" = north west 
+
+L_PIC = CanvaPIC(QST , 0 , 200 )
+M_PIC = CanvaPIC(QST , 150 , 200 )
+R_PIC = CanvaPIC(QST , 300 , 200 )
 
 #endregion
 
@@ -39,12 +59,30 @@ add = 0
 times = 30
 ed = 0
 
-#分數清單
+#清單
 same3 = [200 , 600 , 1600 , 1800 , 10000 , 20000]
 same2 = [100 , 170 , 780 , 870 , 5000 , 10000]
 same1 = [30 , 50 , 250 , 290 , 1200 , 2500]
+picture = [Gss , Hhh , Hentai , Handsun , Kachu , Rrr]
 
-def change(x,y) :
+def PIC(p) :
+      '(歸屬)'
+      "變什麼圖"
+      if p == "A" :
+            Pct = picture[0]
+      elif p == "B" :
+            Pct = picture[1]
+      elif p == "C" :
+            Pct = picture[2]
+      elif p == "D" :
+            Pct = picture[3]
+      elif p == "E" :
+            Pct = picture[4]
+      elif p == "F" :
+            Pct = picture[5] 
+      return Pct  
+
+def ChangeA(x,y) :
       '(歸屬,隨機數)'
       if y <= 36 :
             x = 'A'
@@ -58,7 +96,17 @@ def change(x,y) :
             x = 'E'
       else :
             x = 'F'
-      return x
+
+      return x 
+
+def Local(L, p, x, y) :
+    "(位置,歸屬,圖)"
+    "哪個位置變圖"
+    # 更新該位置的圖片
+    canvas.delete(L)  # 刪除舊圖片
+    L = CanvaPIC(PIC(p), x, y)  # 加載新圖片
+    return L
+      
 
 def ADD(x,y,lst) :
       '(歸屬,增加分,分數清單)'
@@ -87,7 +135,7 @@ def result() :
     add = 0
 
 def Begin() :
-      global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed
+      global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed , L_PIC , M_PIC , R_PIC
 
       print(u"按鈕被點擊了！")
       
@@ -97,9 +145,13 @@ def Begin() :
             ram1 , ram2 , ram3 = randint(1,100) , randint(1,100) , randint(1,100)
 
             #歸屬
-            p1 = change(p1,ram1)
-            p2 = change(p2,ram2)
-            p3 = change(p3,ram3)
+            p1 = ChangeA(p1,ram1)
+            p2 = ChangeA(p2,ram2)
+            p3 = ChangeA(p3,ram3)
+
+            L_PIC = Local(L_PIC , p1 , 0 , 200)
+            M_PIC = Local(M_PIC , p2 , 150 , 200)
+            R_PIC = Local(R_PIC , p3 , 300 , 200)
 
             #增加分數
             #3個相同
@@ -158,8 +210,8 @@ def Begin() :
 
 print(u"共 {} 次".format(times))
 
-start = tk.Button(win , text = "開始" , command=Begin)
-button_Begin = canvas.create_window(180 , 320 , window = start) #將按鈕放置Canva上 320 180 為居中初始位置
+start = tk.Button(win , image = BeginPIC , command=Begin)
+button_Begin = canvas.create_window(225 , 500 , window = start) #將按鈕放置Canva上居中位置
 
 win.mainloop() #視窗常駐
 
