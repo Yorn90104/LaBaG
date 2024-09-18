@@ -16,7 +16,7 @@ def IMAGE(file , w , h) :
 
 def CanvaPIC(pc , x , y) :
       '(照片 , 水平座標 , 垂直座標)'
-      '加載新的圖片並放在畫布上'
+      '加載新的圖片並放在CANVA上'
       canvas.create_image( x , y , image = pc , anchor = "nw")
 
 win = tk.Tk() #建立視窗
@@ -46,8 +46,8 @@ canvas.create_image(0, 0, image = BG, anchor = "nw" ) #加載背景圖片 & "nw"
 L_PIC = CanvaPIC(QST , 0 , 200 )
 M_PIC = CanvaPIC(QST , 150 , 200 )
 R_PIC = CanvaPIC(QST , 300 , 200 )
-
 #endregion
+
 
 #region 定義區
 ram1 , ram2 , ram3 = 0 , 0 , 0
@@ -107,6 +107,13 @@ def Local(L, p, x, y) :
     L = CanvaPIC(PIC(p), x, y)  # 加載新圖片
     return L
       
+def Display() :
+      "視窗顯示"
+      global score , add , ed , times , text_Score , text_ADD
+      canvas.delete(text_ADD)
+      canvas.delete(text_Score)
+      text_ADD =  canvas.create_text(225, 475, text = f"+{add}" , font = ("Arial", 16) , fill = "yellow")
+      text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16) , fill = "white")
 
 def ADD(x,y,lst) :
       '(歸屬,增加分,分數清單)'
@@ -125,13 +132,14 @@ def ADD(x,y,lst) :
       return y
 
 def result() :
-    global score , add , ed , p1 , p2 , p3
+    global score , add , ed , p1 , p2 , p3 ,text_Score
     ed += 1
     score += add
     print(f"第{ed}次")
     print(f' | {p1} | {p2} | {p3} |')
     print(f"+{add}")
     print(f"目前分數：{score}")
+    Display()
     add = 0
 
 def Begin() :
@@ -210,8 +218,12 @@ def Begin() :
 
 print(u"共 {} 次".format(times))
 
-start = tk.Button(win , image = BeginPIC , command=Begin)
-button_Begin = canvas.create_window(225 , 500 , window = start) #將按鈕放置Canva上居中位置
+start_button = tk.Button(win , image = BeginPIC , command=Begin)
+button_Begin = canvas.create_window(225 , 550 , window = start_button) #將按鈕放置Canva上居中位置
+
+text_ADD =  canvas.create_text(225, 475, text = "" , font = ("Arial", 16))
+text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16) , fill = "white")
+
 
 win.mainloop() #視窗常駐
 
