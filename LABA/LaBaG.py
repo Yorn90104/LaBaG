@@ -27,6 +27,7 @@ win.resizable(False, False) # 禁用水平和垂直方向的調整
 
 #圖片
 BG = IMAGE('.\\Asset\\BG.png' , 450 , 800)
+Title = IMAGE('.\\Asset\\Title.png' , 450 , 253)
 
 QST = IMAGE('.\\Asset\\QST.jpg' , 150 , 200) #?
 Gss = IMAGE('.\\Asset\\Gss.jpg' , 150 , 200) #A
@@ -42,10 +43,6 @@ BeginPIC = IMAGE('.\\Asset\\Start.jpg' , 150 , 50)
 canvas = tk.Canvas(win, width = 450, height = 800)
 canvas.pack(fill="both", expand = True) #在視窗中水平和垂直方向上擴展，以填充其父容器的空間
 canvas.create_image(0, 0, image = BG, anchor = "nw" ) #加載背景圖片 & "nw" = north west 
-
-L_PIC = CanvaPIC(QST , 0 , 200 )
-M_PIC = CanvaPIC(QST , 150 , 200 )
-R_PIC = CanvaPIC(QST , 300 , 200 )
 #endregion
 
 
@@ -64,6 +61,20 @@ same3 = [200 , 600 , 1600 , 1800 , 10000 , 20000]
 same2 = [100 , 170 , 780 , 870 , 5000 , 10000]
 same1 = [30 , 50 , 250 , 290 , 1200 , 2500]
 picture = [Gss , Hhh , Hentai , Handsun , Kachu , Rrr]
+
+L_PIC = CanvaPIC(QST , 0 , 250 )
+M_PIC = CanvaPIC(QST , 150 , 250 )
+R_PIC = CanvaPIC(QST , 300 , 250 )
+
+def Qst():
+      "恢復?圖片"
+      global L_PIC , M_PIC , R_PIC
+      canvas.delete(L_PIC)
+      canvas.delete(M_PIC)
+      canvas.delete(R_PIC)
+      L_PIC = CanvaPIC(QST , 0 , 250 )
+      M_PIC = CanvaPIC(QST , 150 , 250 )
+      R_PIC = CanvaPIC(QST , 300 , 250 )
 
 def PIC(p) :
       '(歸屬)'
@@ -109,11 +120,13 @@ def Local(L, p, x, y) :
       
 def Display() :
       "視窗顯示"
-      global score , add , ed , times , text_Score , text_ADD
+      global score , add , ed , times , text_Score , text_ADD , text_Times
       canvas.delete(text_ADD)
       canvas.delete(text_Score)
-      text_ADD =  canvas.create_text(225, 475, text = f"+{add}" , font = ("Arial", 16) , fill = "yellow")
-      text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16) , fill = "white")
+      canvas.delete(text_Times)
+      text_ADD =  canvas.create_text(225, 475, text = f"+{add}" , font = ("Arial", 16 , "bold") , fill = "yellow")
+      text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16 , "bold") , fill = "white")
+      text_Times =  canvas.create_text(225, 525, text = f"剩餘次數：{times - ed}", font = ("Arial", 16 , "bold") , fill = "white")
 
 def ADD(x,y,lst) :
       '(歸屬,增加分,分數清單)'
@@ -146,6 +159,7 @@ def Begin() :
       global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed , L_PIC , M_PIC , R_PIC
 
       print(u"按鈕被點擊了！")
+      Qst()
       
       if ed < times :
       
@@ -157,9 +171,12 @@ def Begin() :
             p2 = ChangeA(p2,ram2)
             p3 = ChangeA(p3,ram3)
 
-            L_PIC = Local(L_PIC , p1 , 0 , 200)
-            M_PIC = Local(M_PIC , p2 , 150 , 200)
-            R_PIC = Local(R_PIC , p3 , 300 , 200)
+            # win.after(500, Local(L_PIC , p1 , 0 , 250))
+            # win.after(1000, Local(M_PIC , p2 , 150 , 250))
+            # win.after(1500, Local(R_PIC , p3 , 300 , 250))
+            L_PIC = Local(L_PIC , p1 , 0 , 250)
+            M_PIC = Local(M_PIC , p2 , 150 , 250)
+            R_PIC = Local(R_PIC , p3 , 300 , 250)
 
             #增加分數
             #3個相同
@@ -212,18 +229,25 @@ def Begin() :
                   #判斷結束
                   print(U"遊戲已結束")
                   print(u"最終分數為：",score)
+                  start_button.config(state="disabled") #按鈕停用
                   return
                   
 #endregion
 
 print(u"共 {} 次".format(times))
 
+def ENTER(event) :
+      Begin()
+
 start_button = tk.Button(win , image = BeginPIC , command=Begin)
-button_Begin = canvas.create_window(225 , 550 , window = start_button) #將按鈕放置Canva上居中位置
+win.bind('<Return>', ENTER)
+button_Begin = canvas.create_window(225 , 575 , window = start_button) #將按鈕放置Canva上居中位置
 
-text_ADD =  canvas.create_text(225, 475, text = "" , font = ("Arial", 16))
-text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16) , fill = "white")
+text_ADD =  canvas.create_text(225, 475, text = "" , font = ("Arial", 16 , "bold"))
+text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16 , "bold") , fill = "white")
+text_Times =  canvas.create_text(225, 525, text = f"剩餘次數：{times - ed}", font = ("Arial", 16 , "bold") , fill = "white")
 
+pic_Title = CanvaPIC(Title , 0 , 25)
 
 win.mainloop() #視窗常駐
 
