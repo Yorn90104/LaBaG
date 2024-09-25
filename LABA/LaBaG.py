@@ -25,13 +25,17 @@ def IMAGE(file, w, h):
 
 def CanvaPIC(pc, x, y):
     """加載新的圖片並放在CANVA上 (照片, 水平座標, 垂直座標)"""
-    canvas.create_image(x, y, image = pc, anchor = "nw")
+    canvas_Game.create_image(x, y, image = pc, anchor = "nw")
 
 win = tk.Tk()  # 建立視窗
 win.title("啦八機")  # 視窗標題
 win.iconbitmap('.\\Asset\\Superhhh.ico')  # 視窗小圖
 win.geometry("450x800")  # 視窗長寬
 win.resizable(False , False)  # 禁用水平和垂直方向的調整
+
+# 創建兩個 Frame，分別代表不同的畫面
+frame_Game = tk.Frame(win, width=450, height=800, bg='lightblue')
+frame_End = tk.Frame(win, width=450, height=800, bg='lightgreen')
 
 # 圖片
 BG = IMAGE('.\\Asset\\BG.png' , 450 , 800)
@@ -46,9 +50,14 @@ Rrr = IMAGE('.\\Asset\\RRR.jpg' , 150 , 200)  # F
 BeginPIC = IMAGE('.\\Asset\\Start.jpg' , 150 , 50)
 
 # 創建 Canvas 並設置背景圖片
-canvas = tk.Canvas(win, width=450, height=800)
-canvas.pack(fill="both", expand=True)
-canvas.create_image(0, 0, image=BG, anchor="nw")
+#Game畫面
+canvas_Game = tk.Canvas(frame_Game, width=450, height=800)
+canvas_Game.pack(fill="both", expand=True)
+canvas_Game.create_image(0, 0, image=BG, anchor="nw")
+#End畫面
+canvas_End = tk.Canvas(frame_End, width=450, height=800)
+canvas_End.pack(fill="both", expand=True)
+canvas_End.create_image(0, 0, image=BG, anchor="nw")
 #endregion
 
 #region 遊戲邏輯變數區
@@ -72,12 +81,12 @@ R_PIC = CanvaPIC(QST, 300, 250)
 def INIT():
     """初始化顯示"""
     global L_PIC, M_PIC, R_PIC, text_ADD
-    canvas.delete(L_PIC)
-    canvas.delete(M_PIC)
-    canvas.delete(R_PIC)
-    canvas.delete(text_ADD)
+    canvas_Game.delete(L_PIC)
+    canvas_Game.delete(M_PIC)
+    canvas_Game.delete(R_PIC)
+    canvas_Game.delete(text_ADD)
 
-    text_ADD = canvas.create_text(225, 475, text="", font=("Arial", 16, "bold"))
+    text_ADD = canvas_Game.create_text(225, 475, text="", font=("Arial", 16, "bold"))
     L_PIC = CanvaPIC(QST, 0, 250)
     M_PIC = CanvaPIC(QST, 150, 250)
     R_PIC = CanvaPIC(QST, 300, 250)
@@ -114,20 +123,20 @@ def ChangeA(x, y):
 
 def Local(L, p, x, y):
     """哪個位置變圖 (位置, 歸屬, 圖)"""
-    canvas.delete(L)  # 刪除舊圖片
+    canvas_Game.delete(L)  # 刪除舊圖片
     L = CanvaPIC(PIC(p), x, y)  # 加載新圖片
     Ding()
 
 def Display():
     """顯示結果"""
     global score, add, ed, times, text_Score, text_ADD, text_Times
-    canvas.delete(text_ADD)
-    canvas.delete(text_Score)
-    canvas.delete(text_Times)
+    canvas_Game.delete(text_ADD)
+    canvas_Game.delete(text_Score)
+    canvas_Game.delete(text_Times)
 
-    text_ADD = canvas.create_text(225, 475, text=f"+{add}", font=("Arial", 16, "bold"), fill="yellow")
-    text_Score = canvas.create_text(225, 500, text=f"目前分數：{score}", font=("Arial", 16, "bold"), fill="white")
-    text_Times = canvas.create_text(225, 525, text=f"剩餘次數：{times - ed}", font=("Arial", 16, "bold"), fill="white")
+    text_ADD = canvas_Game.create_text(225, 475, text=f"+{add}", font=("Arial", 16, "bold"), fill="yellow")
+    text_Score = canvas_Game.create_text(225, 500, text=f"目前分數：{score}", font=("Arial", 16, "bold"), fill="white")
+    text_Times = canvas_Game.create_text(225, 525, text=f"剩餘次數：{times - ed}", font=("Arial", 16, "bold"), fill="white")
 
 def ADD(x, y, lst):
     """增加分數 (歸屬, 增加分數, 分數清單)"""
@@ -157,6 +166,8 @@ def result():
     Display()
     add = 0
 
+    return 
+
 def Able():
     """3.5秒後啟用開始按鈕 & ENTER"""
     win.after(3500, lambda: start_button.config(state="normal"))
@@ -167,6 +178,12 @@ def Unable():
     start_button.config(state="disabled")
     win.unbind('<Return>')
 
+def game_over():
+    """遊戲結束，切換到結果頁面"""
+    frame_Game.pack_forget()  # 隱藏遊戲畫面
+    print("切換End畫面")
+    frame_End.pack(fill='both', expand=True)  # 顯示遊戲結束畫面
+
 def Begin() :
       global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed , L_PIC , M_PIC , R_PIC
 
@@ -176,7 +193,7 @@ def Begin() :
 
       INIT()
       
-      if ed < times :
+      if ed  < times :
       
             #隨機數
             ram1 , ram2 , ram3 = randint(1,100) , randint(1,100) , randint(1,100)
@@ -238,16 +255,21 @@ def Begin() :
 
             win.after(3000 , result)
             
-            if ed >= times :
-                  #判斷結束
-                  print(U"遊戲已結束")
-                  print(u"最終分數為：",score)
-                  
-                  Unable()
-                  return
-            else :
-                  Able()
-                  
+            if ed + 1 >= times:
+                # 判斷遊戲結束
+                print("遊戲已結束")
+                print(f"最終分數為：{score}")
+                
+                # 停用按鈕和鍵盤事件
+                win.after(3500, Unable)
+
+                # 切換到結束畫面
+                win.after(3500, game_over)
+                
+            else:
+                # 遊戲繼續
+                Able()
+                        
 #endregion
 
 print(u"共 {} 次".format(times))
@@ -255,15 +277,31 @@ print(u"共 {} 次".format(times))
 def ENTER(event) :
       Begin()
 
+#Game畫面
 start_button = tk.Button(win , image = BeginPIC , command=Begin)
 win.bind('<Return>', ENTER)
-button_Begin = canvas.create_window(225 , 575 , window = start_button) #將按鈕放置Canva上居中位置
+button_Begin = canvas_Game.create_window(225 , 575 , window = start_button) #將按鈕放置Game的Canva上
 
-text_ADD =  canvas.create_text(225, 475, text = "" , font = ("Arial", 16 , "bold"))
-text_Score =  canvas.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16 , "bold") , fill = "white")
-text_Times =  canvas.create_text(225, 525, text = f"剩餘次數：{times - ed}", font = ("Arial", 16 , "bold") , fill = "white")
+text_ADD =  canvas_Game.create_text(225, 475, text = "" , font = ("Arial", 16 , "bold"))
+text_Score =  canvas_Game.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16 , "bold") , fill = "white")
+text_Times =  canvas_Game.create_text(225, 525, text = f"剩餘次數：{times - ed}", font = ("Arial", 16 , "bold") , fill = "white")
+
+#End畫面
+def Again():
+    global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed 
+    ram1, ram2, ram3 = 0 , 0 , 0
+    p1, p2, p3 = '', '', ''
+    score, add, ed = 0 , 0 , 30 , 0
+    INIT()
+
+again_button = tk.Button(win , text = "再一次" , command = Again)
+button_again = canvas_End.create_window(225 , 575 , window = again_button) #將按鈕放置END的Canva上
+
+text_ANS =  canvas_End.create_text(225, 500, text = f"最終分數：{score}", font = ("Arial", 30 , "bold") , fill = "white")
+
 
 pic_Title = CanvaPIC(Title , 0 , 25)
 
+frame_Game.pack(fill='both', expand=True)
 win.mainloop() #視窗常駐
 
