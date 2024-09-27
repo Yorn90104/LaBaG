@@ -23,9 +23,13 @@ def IMAGE(file, w, h):
     pc = ImageTk.PhotoImage(pc)
     return pc
 
-def CanvaPIC(pc, x, y):
-    """加載新的圖片並放在CANVA上 (照片, 水平座標, 垂直座標)"""
+def GamePIC(pc, x, y):
+    """加載新的圖片並放在Game的CANVA上 (照片, 水平座標, 垂直座標)"""
     canvas_Game.create_image(x, y, image = pc, anchor = "nw")
+
+def EndPIC(pc, x, y):
+    """加載新的圖片並放在End的CANVA上 (照片, 水平座標, 垂直座標)"""
+    canvas_End.create_image(x, y, image = pc, anchor = "nw")
 
 win = tk.Tk()  # 建立視窗
 win.title("啦八機")  # 視窗標題
@@ -48,6 +52,7 @@ Handsun = IMAGE('.\\Asset\\Handsun.jpg' , 150 , 200)  # D
 Kachu = IMAGE('.\\Asset\\Kachu.jpg' , 150 , 200)  # E
 Rrr = IMAGE('.\\Asset\\RRR.jpg' , 150 , 200)  # F
 BeginPIC = IMAGE('.\\Asset\\Start.jpg' , 150 , 50)
+SB = IMAGE('.\\Asset\\SB.png' , 450 , 169) #記分板
 
 # 創建 Canvas 並設置背景圖片
 #Game畫面
@@ -63,7 +68,7 @@ canvas_End.create_image(0, 0, image=BG, anchor="nw")
 #region 遊戲邏輯變數區
 ram1, ram2, ram3 = 0 , 0 , 0
 p1, p2, p3 = '', '', ''
-score, add, times, ed = 0 , 0 , 30 , 0
+score, add, times, ed = 0 , 0 , 5 , 0
 
 # 分數清單
 same3 = [200 , 600 , 1600 , 1800 , 10000 , 20000]
@@ -72,9 +77,9 @@ same1 = [30 , 50 , 250 , 290 , 1200 , 2500]
 picture = [Gss , Hhh , Hentai , Handsun , Kachu , Rrr]
 
 # 初始圖片
-L_PIC = CanvaPIC(QST, 0, 250)
-M_PIC = CanvaPIC(QST, 150, 250)
-R_PIC = CanvaPIC(QST, 300, 250)
+L_PIC = GamePIC(QST, 0, 250)
+M_PIC = GamePIC(QST, 150, 250)
+R_PIC = GamePIC(QST, 300, 250)
 #endregion
 
 #region 遊戲邏輯函數區
@@ -86,9 +91,9 @@ def INIT():
     canvas_Game.delete(R_PIC)
 
     canvas_Game.itemconfig(text_ADD , text = "" )
-    L_PIC = CanvaPIC(QST, 0, 250)
-    M_PIC = CanvaPIC(QST, 150, 250)
-    R_PIC = CanvaPIC(QST, 300, 250)
+    L_PIC = GamePIC(QST, 0, 250)
+    M_PIC = GamePIC(QST, 150, 250)
+    R_PIC = GamePIC(QST, 300, 250)
 
 def PIC(p):
     """根據歸屬選擇圖 (歸屬)"""
@@ -123,7 +128,7 @@ def ChangeA(x, y):
 def Local(L, p, x, y):
     """哪個位置變圖 (位置, 歸屬, 圖)"""
     canvas_Game.delete(L)  # 刪除舊圖片
-    L = CanvaPIC(PIC(p), x, y)  # 加載新圖片
+    L = GamePIC(PIC(p), x, y)  # 加載新圖片
     Ding()
 
 def Display():
@@ -284,8 +289,11 @@ text_ADD =  canvas_Game.create_text(225, 475, text = "" , font = ("Arial", 16 , 
 text_Score =  canvas_Game.create_text(225, 500, text = f"目前分數：{score}", font = ("Arial", 16 , "bold") , fill = "white")
 text_Times =  canvas_Game.create_text(225, 525, text = f"剩餘次數：{times - ed}", font = ("Arial", 16 , "bold") , fill = "white")
 
+pic_Title = GamePIC(Title , 0 , 25)
+
 #End畫面
 def Again():
+    "再一次"
     global ram1 , ram2 , ram3 , p1 , p2 , p3 , score , add , ed  , times, text_Score, text_ADD, text_Times
     ram1, ram2, ram3 = 0 , 0 , 0
     p1, p2, p3 = '', '', ''
@@ -300,15 +308,13 @@ def Again():
     frame_End.pack_forget()
     frame_Game.pack(fill='both', expand=True)
 
-
-again_button = tk.Button(win , text = "再一次" , command = Again , width = 10, height = 1 , font = ("Arial", 20, "bold"))
+again_button = tk.Button(win , text = "再玩一次" , command = Again , width = 10, height = 1 , font = ("Arial", 20, "bold"))
 button_again = canvas_End.create_window(225 , 425 , window = again_button) #將按鈕放置END的Canva上
 
-text_Over =  canvas_End.create_text(225, 280 , text = f"", font = ("Arial", 40 , "bold") , fill = "white")
+text_Over =  canvas_End.create_text(225, 280 , text = f"", font = ("Arial", 42 , "bold") , fill = "white")
 text_ANS =  canvas_End.create_text(225, 345 , text = f"", font = ("Arial", 32 , "bold") , fill = "Gold")
 
-
-pic_Title = CanvaPIC(Title , 0 , 25)
+pic_SB = EndPIC(SB , 0 , 500)
 
 frame_Game.pack(fill='both', expand=True)
 win.mainloop() #視窗常駐
